@@ -17,6 +17,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #create a variable
 set(GAME_EXECUTABLE Saga_Prog)
 
-add_subdirectory(Saga)
+# Poiting out to the subdirectory containing 
+# the source code
+add_subdirectory(Saga_Code)
 
 
