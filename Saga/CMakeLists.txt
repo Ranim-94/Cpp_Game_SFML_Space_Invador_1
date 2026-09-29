@@ -1,3 +1,6 @@
+
+# CMake file at Workspace level
+
 cmake_minimum_required(VERSION 4.4.3)
 
 # Set some basic project attributes
@@ -11,7 +14,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(Saga
-	${CMAKE_CURRENT_SOURCE_DIR}/Saga/src/main.cpp
-)
+#create a variable
+set(GAME_EXECUTABLE Saga_Prog)
+
+add_subdirectory(Saga)
+
 
