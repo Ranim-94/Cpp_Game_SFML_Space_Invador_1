@@ -7,8 +7,6 @@
   - [Context](#context)
   - [IDE and Build System](#ide-and-build-system)
   - [SFML](#sfml)
-    - [Installation](#installation)
-    - [Configuring SFML in Eclipse](#configuring-sfml-in-eclipse)
 
 ## Context
 
@@ -29,27 +27,4 @@ For this project we use [Eclipse IDE](https://eclipseide.org/) as our developmen
 
 As a 3rd party library we use [`SFML`](https://www.sfml-dev.org/), to help handle game features such images, audio,...
 
-### Installation
-
-To install all `SFML`  modules (Graphics, Audio, Window, System, Network) at once, run the following command
-
-<pre>sudo apt install libsfml-dev</pre>
-
-To verify all modules are installed and working:
-
-<pre>dpkg -l | grep sfml</pre>
-
-<u>Note</u>: the `ii` we see at the start means the package is installed and working.
-
-### Configuring SFML in Eclipse
-
-To link the libraries dynamically in `Eclipse`, right click on the project, click `Properties` -> `C/C++ general` -> `Path and Symbols`-> `Libraries`, as shown in [Figure 1](#fig1)
-
-<div id="fig1">
-<img src="Figures_VsCode/eclipse_sfml_config.png" alt="Widget Types" width="450">
-<p><strong>Figure 1:</strong> Configuring SFML in Eclipse</p>
-</div>
-
-Then add the following linker libraries:
-
-<pre> "sfml-graphics" "sfml-audio" "sfml-window" "sfml-system" </pre>
+To see how to install it, please refer to the [SFML installation guide](Doc/SFML_Installation.md).

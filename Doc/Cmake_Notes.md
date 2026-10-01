@@ -1,5 +1,12 @@
 # Cmake Notes
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Context](#context)
+- [Version number meaning](#version-number-meaning)
+- [CMake Benifits](#cmake-benifits)
+
 ## Installation
 
 ```

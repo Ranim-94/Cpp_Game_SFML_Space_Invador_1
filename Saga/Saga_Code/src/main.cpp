@@ -1,22 +1,34 @@
 
 
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 
 int main() {
 
-	std::cout << "Hello World" << std::endl;
+	// Instantiate a "window" object
+	sf::RenderWindow window(sf::VideoMode({800,600}),
+	"Space Invador");
 
-	int a = 0;
+	while(window.isOpen()){
 
-	for (int i=0; i<5;i++){
+		while(const std::optional window_event = window.pollEvent()){
+		
+			if(window_event->is<sf::Event::Closed>()){
+				window.close();
+			}
+		
+		
+		} // End inner while()
 
-		a++;
+	window.clear(sf::Color::Black);
+	
+	window.display();
 
-		std::cout<<"\t -> a = "<<a<<std::endl;
-	}
+
+	}// End outer while()
 
 
 	return 0;
 
-}
+} // End main()
