@@ -38,6 +38,9 @@ The outer loop keeps the window running. The inner loop handles all events curre
 
 ### Wrong approach
 
+In this approach I called the `window.pollEvent()` **before the `while()` loop**.
+
+
 This version polls only once, before entering the loop:
 
 ```cpp

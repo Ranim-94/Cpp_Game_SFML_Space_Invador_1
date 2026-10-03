@@ -21,7 +21,6 @@ set(GAME_EXECUTABLE Saga_Prog)
 # the source code
 add_subdirectory(Saga_Code)
 
-
 # Adding SFML
 # Use the globally installed SFML 3.1 package.
 find_package(SFML 3.1 CONFIG REQUIRED COMPONENTS 

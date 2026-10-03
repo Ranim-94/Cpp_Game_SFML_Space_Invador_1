@@ -1,32 +1,21 @@
 
 
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include<memory>
 
+#include"framework/Application.h"
 
 int main() {
 
-	// Instantiate a "window" object
-	sf::RenderWindow window(sf::VideoMode({800,600}),
-	"Space Invador");
-
-	while(window.isOpen()){
-
-		while(const std::optional window_event = window.pollEvent()){
-		
-			if(window_event->is<sf::Event::Closed>()){
-				window.close();
-			}
-		
-		
-		} // End inner while()
-
-	window.clear(sf::Color::Black);
 	
-	window.display();
+std::unique_ptr<saga::Application> app = std::make_unique<saga::Application>();
+
+app->run(); 
 
 
-	}// End outer while()
+
+
+	
 
 
 	return 0;
