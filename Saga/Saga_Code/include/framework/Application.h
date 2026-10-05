@@ -12,6 +12,14 @@ namespace saga{
 
 			sf::RenderWindow m_window;
 
+			float m_frame_rate_target;
+
+			sf::Clock m_tick_clock;
+
+			void tick(float& time);
+
+			void render(void);
+
 
 
 
