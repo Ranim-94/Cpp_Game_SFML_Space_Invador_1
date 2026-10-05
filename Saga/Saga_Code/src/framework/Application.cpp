@@ -31,28 +31,34 @@ namespace saga {
 
 		while(this->m_window.isOpen()){
 
+			// Checking for events
 			while(const std::optional window_event = this->m_window.pollEvent()){
 			
 				if(window_event->is<sf::Event::Closed>()){
 					this->m_window.close();
 				}
 
+			} // End inner while() checking for events
 
-			render();// display things like shapes (rectangle,circle,....)		
-			
-			
-			} // End inner while()
-
+		this->render_internal();// display things like shapes (rectangle,circle,....)		
 		
+		// measure time accumulated 
 		time_accumulated += this->m_tick_clock.restart().asSeconds();
 
+		// udapte time if condition is true	
+		/*
+			This while() runs at a fixed 
+			frame_rate since it only enter 
+			when "time_accumulated" is big enough
+		
+		*/
 		while(time_accumulated >= time_frame){
 
 			time_accumulated -= time_frame;
 
-			tick(time_frame);
+			this->tick_internal(time_frame);
 
-		}
+		}// End while() udapte time
 
 		}// End outer while()
 
@@ -61,6 +67,11 @@ namespace saga {
 
 	} // End run()
 
+void Application::tick_internal(float& time){
+
+	this->tick(time);
+
+}// End tick_internal()
 
 void Application::tick(float& time){
 
@@ -71,10 +82,8 @@ void Application::tick(float& time){
 
 
 void Application::render(void){
-
-	// clear last frame	
-	this->m_window.clear(sf::Color::Black);
 	
+	// create basic shape: rectangle
 	sf::RectangleShape rect(sf::Vector2f({50.0f,50.0f}));
 
 	rect.setFillColor(sf::Color::Red);
@@ -87,13 +96,27 @@ void Application::render(void){
 
 	rect.setPosition(sf::Vector2f(window_dim.x/2,window_dim.y/2)) ;
 
+	// drawing the rectangle
 	this->m_window.draw(rect);
-	
+		
+
+}// End render()
+
+
+void Application::render_internal(void){
+
+	// clear last frame	
+	this->m_window.clear(sf::Color::Black);
+
+	// render a shape
+	this->render();
 
 	// display new frame
 	this->m_window.display();
 
-}// End render()
+
+}// End render_internal()
+
 
 
 } // End namespace saga

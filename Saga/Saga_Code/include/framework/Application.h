@@ -18,7 +18,14 @@ namespace saga{
 
 			void tick(float& time);
 
-			void render(void);
+			void tick_internal(float& time);
+
+			void render_internal(void);
+			// render_internal() plays role of some base class
+
+			virtual void render(void);
+			// we use 'virtual' so we can override the render()
+			// 
 
 
 
