@@ -14,25 +14,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-#create a variable
-set(GAME_EXECUTABLE Saga_Prog)
+#create a variable: adding executables 
+set(GAME_EXECUTABLE Saga_Game) # for the game
 
-# Pointing out to the subdirectory containing 
-# the source code
-add_subdirectory(Saga_Code)
+set(ENGINE_EXECUTABLE Saga_Engine) # for the engine
 
 # Adding SFML
 # Use the globally installed SFML 3.1 package.
 find_package(SFML 3.1 CONFIG REQUIRED COMPONENTS 
 Graphics Window System Audio)
 
-# Linking the SFML targets to the project
-target_link_libraries(${GAME_EXECUTABLE} PRIVATE
-	SFML::Graphics
-	SFML::Window
-	SFML::System
-	SFML::Audio
-)
+# Pointing out to the subdirectory containing 
+# the source code: engine code and game code
+add_subdirectory(Saga_Engine)
+
+add_subdirectory(Saga_Game)
+
 
 
 #[[

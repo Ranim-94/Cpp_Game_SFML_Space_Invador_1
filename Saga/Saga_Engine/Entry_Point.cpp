@@ -1,14 +1,14 @@
 
 
 
-#include "../include/Entry_Point.h"
+#include "Entry_Point.h"
 
 #include "framework/Application.h"
 
 
 int main(){
 
-	Application* app = Saga::Application::get_application();
+	saga::Application* app = saga::Application::get_application();
 
 	app->run();
 
