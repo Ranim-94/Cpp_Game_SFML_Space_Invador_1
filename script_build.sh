@@ -5,7 +5,7 @@ set -euo pipefail
 project_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 source_dir="$project_root/Saga"
 build_dir="$source_dir/build"
-executable="$build_dir/Saga_Code/Saga_Prog"
+executable="$build_dir/Saga_Game/Saga_Game"
 
 cmake --fresh \
     -S "$source_dir" \

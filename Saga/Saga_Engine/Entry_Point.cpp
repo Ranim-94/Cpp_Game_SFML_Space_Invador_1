@@ -8,7 +8,7 @@
 
 int main(){
 
-	saga::Application* app = saga::Application::get_application();
+	saga::Application* app = saga::get_application();
 
 	app->run();
 

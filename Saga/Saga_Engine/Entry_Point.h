@@ -7,13 +7,13 @@
 namespace saga{
 
 
-	extern Application* get_app();
+	extern Application* get_application();
 
 	/*
 	 * - "extern": means that Application class is defined
 	 * somewhere else
 	 *
-	 * 	we need to provide an implementation for "get_app()"
+	 * 	we need to provide an implementation for "get_application()"
 	 *
 	 *
 	 * */
