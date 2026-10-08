@@ -4,6 +4,10 @@
 add_library(${ENGINE_EXECUTABLE} STATIC
 ${CMAKE_CURRENT_SOURCE_DIR}/framework/Application.h
 ${CMAKE_CURRENT_SOURCE_DIR}/framework/Application.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/framework/Core.h
+${CMAKE_CURRENT_SOURCE_DIR}/framework/Core.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/framework/World.h
+${CMAKE_CURRENT_SOURCE_DIR}/framework/World.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Entry_Point.h
 ${CMAKE_CURRENT_SOURCE_DIR}/Entry_Point.cpp
 )

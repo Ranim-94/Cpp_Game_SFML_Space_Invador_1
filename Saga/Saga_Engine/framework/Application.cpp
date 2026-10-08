@@ -42,17 +42,18 @@ namespace saga {
 
 		this->render_internal();// display things like shapes (rectangle,circle,....)		
 		
-		// measure time accumulated 
+		// measure 'time_accumulated' 
 		time_accumulated += this->m_tick_clock.restart().asSeconds();
 
 		// udapte time if condition is true	
-		/*
+		while(time_accumulated >= time_frame){
+
+			/*
 			This while() runs at a fixed 
 			frame_rate since it only enter 
 			when "time_accumulated" is big enough
 		
 		*/
-		while(time_accumulated >= time_frame){
 
 			time_accumulated -= time_frame;
 
@@ -60,7 +61,7 @@ namespace saga {
 
 		}// End while() udapte time
 
-		}// End outer while()
+		}// End outer while() window->isOpen()
 
 
 		
