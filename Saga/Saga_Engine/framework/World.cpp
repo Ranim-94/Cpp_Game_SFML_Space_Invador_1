@@ -1,13 +1,17 @@
 
 
-#include "framework/World.h"
+
+
+
+#include "World.h"
+
 #include "framework/Core.h"
 
 
 namespace saga{
 
-    World::World(Application* owner_app):
-    m_owner_app{owner_app}{
+    World::World():
+    m_is_play{false}{
 
     }// End World()
 
@@ -27,7 +31,7 @@ namespace saga{
         } // End if() checking the game
 
 
-    }// End start_play()
+    }// End start_play_internal()
 
 
 
@@ -38,7 +42,7 @@ namespace saga{
         this->tick(time);
 
 
-    }// End tick()
+    }// End tick_internal()
 
 
     void World::tick(float time){
@@ -56,7 +60,18 @@ namespace saga{
     }// End start_play()
 
 
+    World::~World(){
+
+
+    }
+
+
 }// End namespace saga
+
+
+
+
+
 
 
 

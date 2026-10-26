@@ -1,6 +1,9 @@
 
 #include "framework/Application.h"
 
+#include "framework/World.h"
+// to use World class methods
+
 #include<iostream>
 #include<format>
 
@@ -11,7 +14,8 @@ namespace saga {
 	Application::Application():
 	m_window{sf::VideoMode({800,600}),"Space Invador"},
 	m_frame_rate_target{60.0},
-	m_tick_clock{}
+	m_tick_clock{},
+	m_current_world{nullptr}
 	{
 
 
@@ -25,10 +29,10 @@ namespace saga {
 
 		float time_accumulated = 0.f; 
 
-		// computing target frame time
+		// computing target 'time_frame' 
 		float time_frame = 1.0f/this->m_frame_rate_target;
 
-
+		// start main loop 
 		while(this->m_window.isOpen()){
 
 			// Checking for events
@@ -40,37 +44,41 @@ namespace saga {
 
 			} // End inner while() checking for events
 
-		this->render_internal();// display things like shapes (rectangle,circle,....)		
-		
-		// measure 'time_accumulated' 
-		time_accumulated += this->m_tick_clock.restart().asSeconds();
+			// reaching this line meaning I have an opened window
+			this->render_internal();
+			// display things like shapes (rectangle,circle,....)		
+			
+			// measure 'time_accumulated' 
+			time_accumulated += this->m_tick_clock.restart().asSeconds();
 
-		// udapte time if condition is true	
-		while(time_accumulated >= time_frame){
+			// udapte time if condition is true	
+			while(time_accumulated >= time_frame){
 
-			/*
-			This while() runs at a fixed 
-			frame_rate since it only enter 
-			when "time_accumulated" is big enough
-		
-		*/
+				/*
+				This while() runs at a fixed 
+				'frame_rate' since it only enter 
+				when "time_accumulated" is big enough
+				*/
 
-			time_accumulated -= time_frame;
+				time_accumulated -= time_frame;
 
-			this->tick_internal(time_frame);
+				this->tick_internal(time_frame);
 
-		}// End while() udapte time
+			}// End while() udapte time
 
 		}// End outer while() window->isOpen()
-
-
 		
-
-	} // End run()
+	} // End Application::run()
 
 void Application::tick_internal(float& time){
+	
+	this->tick(time); // overall Application tick()
 
-	this->tick(time);
+	if (this->m_current_world){
+		
+		this->m_current_world->start_play_internal();
+		this->m_current_world->tick_internal(time);
+	}
 
 }// End tick_internal()
 
@@ -121,7 +129,6 @@ void Application::render_internal(void){
 
 
 } // End namespace saga
-
 
 
 

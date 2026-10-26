@@ -1,6 +1,5 @@
 
 
-
 /*
  *
  *
@@ -14,43 +13,32 @@
  *
  * */
 
-
  #pragma once
-
- #include "framework/Application.h"
 
  namespace saga {
 
     class World{
+    
+        private:
+
+            bool m_is_play;
 
         public:
 
-        explicit World(Application* owner_app);
+            explicit World();
 
-        virtual void start_play();
+             // these are implemented in the engine
+            void start_play_internal();
 
-        virtual void tick(float time);
+            void tick_internal(float time);
 
-        virtual ~World();
+            // method will be override by the game
+            virtual void start_play();
+        
+            virtual void tick(float time);
+    
+            virtual ~World();   
 
-
-        private:
-
-        Application* m_owner_app;
-
-        bool m_is_play;
-
-        void start_play_internal();
-
-        void tick_internal(float time);
-
-
-
-
-    } ; // 
-
-
-
-
+    } ; // End class World
 
  } // End saga

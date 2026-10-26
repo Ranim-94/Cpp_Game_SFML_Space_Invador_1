@@ -9,13 +9,13 @@
 int main(){
 
 	saga::Application* app = saga::get_application();
+	// 'Game_App' class will be instantiated on the heap
 
 	app->run();
 
 	delete app;
 
-
-		return 0;
+	return 0;
 
 
 }// End main()
