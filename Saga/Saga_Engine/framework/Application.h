@@ -48,7 +48,7 @@ namespace saga{
 
 			// creating a shared pointer of some type 'WorldType'
 			std::shared_ptr<WorldType> new_world = 
-			std::make_shared<WorldType>();
+			std::make_shared<WorldType>(this);
 
 			/*
 				Recall that when calling std::make_shared<type>(args),

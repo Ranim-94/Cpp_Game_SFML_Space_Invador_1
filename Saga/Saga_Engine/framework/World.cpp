@@ -10,7 +10,8 @@
 
 namespace saga{
 
-    World::World():
+    World::World(Application* owner_app):
+    m_owner_app{owner_app},
     m_is_play{false}{
 
     }// End World()

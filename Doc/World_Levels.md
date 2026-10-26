@@ -15,6 +15,13 @@
     - [Part 3: replacing a world](#part-3-replacing-a-world)
     - [Part 4: when `LoadWorld` is not called](#part-4-when-loadworld-is-not-called)
     - [Notes](#notes)
+  - [Linking World and Application](#linking-world-and-application)
+    - [Two different directions](#two-different-directions)
+    - [The code](#the-code)
+    - [Why a raw pointer and not a smart pointer](#why-a-raw-pointer-and-not-a-smart-pointer)
+    - [Benefits](#benefits)
+    - [Without the pointer](#without-the-pointer)
+    - [Rule for new world types](#rule-for-new-world-types)
 
 ## Overview
 
@@ -272,3 +279,159 @@ methods are skipped without a crash and nothing is printed for the world.
 - **First tick:** `start_play()` runs only once per world, guarded by `m_is_play`.
 - Read from the code, not confirmed with a debugger. To verify, put a breakpoint in
   `World::World()` and look at the call stack.
+
+
+## Linking World and Application
+
+### Two different directions
+
+`Application` owning the `World` does not give the `World` a way to reach the `Application`.
+Two separate links are needed:
+
+```
+Application ──shared_ptr<World>──> World        (ownership: who keeps it alive)
+World       ──Application*───────> Application  (access: how it talks back)
+```
+
+- `std::shared_ptr<World> m_current_world` in `Application` answers who owns the world and
+  who can replace it.
+- `Application* m_owner_app` in `World` answers which application the world belongs to.
+
+The first link alone is enough to run the game, as shown in the run time section. The second one
+is what lets the world **ask the application to do something**.
+
+### The code
+
+```cpp
+// World.h
+class Application;   // forward declaration is enough for a pointer
+
+class World{
+    private:
+        Application* m_owner_app;   // non-owning back pointer
+    public:
+        explicit World(Application* owner_app);
+};
+```
+
+```cpp
+// World.cpp
+World::World(Application* owner_app):
+m_owner_app{owner_app}
+{
+}
+```
+
+```cpp
+// Application.h, inside LoadWorld<>()
+std::shared_ptr<WorldType> new_world = std::make_shared<WorldType>(this);
+```
+
+Here `this` is the `Application` running `LoadWorld<>()` (a `Game_App` seen as its base
+`Application`). `make_shared` forwards it to the constructor, so every world is created
+knowing its owner and can never exist without one.
+
+### Why a raw pointer and not a smart pointer
+
+`Application` already owns the `World` with a `shared_ptr`. If `World` also held a
+`shared_ptr<Application>`, each would keep the other alive and neither could be destroyed
+(a reference cycle).
+
+The raw `Application*` only observes. It is safe here because the application outlives
+its worlds: `delete app` destroys `m_current_world` first.
+
+### Benefits
+
+#### 1. Switching worlds
+
+A world finishing its level asks the application to load the next one. `Game_Success_World`
+and `Level_Two` below are hypothetical `World` subclasses:
+
+```cpp
+void Level_One::tick(float time){
+
+    if (m_player_won){
+        m_owner_app->LoadWorld<Game_Success_World>();
+    }
+}
+```
+
+This is the original goal of the design: menu, game level, game success and game exit are all
+worlds, and `Application` moves between them.
+
+`LoadWorld<>()` replaces `m_current_world`, so the world that called it is destroyed while its
+own `tick()` is still running. The swap should be delayed until the end of the frame.
+
+#### 2. Quitting the game
+
+```cpp
+void Game_Over_World::tick(float time){
+
+    if (m_exit_requested){
+        m_owner_app->quit();   // hypothetical: window.close()
+    }
+}
+```
+
+`m_window` is private in `Application`, so the world cannot close it. The application would
+expose a small public method for it.
+
+#### 3. Window information and rendering
+
+A world that places objects or draws them needs the window size or the window itself:
+
+```cpp
+// hypothetical public getter in Application
+sf::Vector2u Application::get_window_size() const {
+    return m_window.getSize();
+}
+```
+
+```cpp
+void World::start_play(){
+
+    sf::Vector2u size = m_owner_app->get_window_size();
+    // place the player at the centre of the screen
+}
+```
+
+#### 4. Shared engine services
+
+Anything owned by the application can be reached by every world through one pointer, such as
+the clock, an asset manager (textures, sounds) or the input state, without global variables.
+
+#### 5. Identifying the owner
+
+With several applications or tools, a world can tell which application owns it, as in
+`if (m_owner_app == app)`.
+
+### Without the pointer
+
+Removing `m_owner_app` compiles only if `World` has no `Application*` constructor and
+`LoadWorld<>()` calls `std::make_shared<WorldType>()` with no argument. Changing only one side
+gives a build error in the game, because `LoadWorld<>()` is compiled where it is called.
+
+| Option | Trade-off |
+|---|---|
+| `Application* m_owner_app` in `World` | Simple, no cycle; every world type needs the matching constructor. |
+| Pass `Application&` into each method, e.g. `tick(float, Application&)` | No stored pointer, but it clutters every signature. |
+| Global or singleton application | Easy, but hides dependencies and makes testing harder. |
+| No back pointer | Fine until a world must switch worlds or quit. |
+
+In the current code `m_owner_app` is stored but nothing reads it yet. It is added ahead of need,
+because worlds will soon have to request world changes and use application services.
+
+### Rule for new world types
+
+Every `World` subclass loaded through `LoadWorld<>()` needs a constructor that accepts
+`Application*` and passes it to `World`:
+
+```cpp
+class Level_One : public World{
+    public:
+        explicit Level_One(Application* owner_app):
+        World(owner_app)
+        {
+        }
+};
+```

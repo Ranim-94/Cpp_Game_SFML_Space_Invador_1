@@ -17,15 +17,19 @@
 
  namespace saga {
 
+    class Application; // declare Application class
+
     class World{
     
         private:
+
+            Application* m_owner_app;
 
             bool m_is_play;
 
         public:
 
-            explicit World();
+            explicit World(Application* owner_app);
 
              // these are implemented in the engine
             void start_play_internal();
