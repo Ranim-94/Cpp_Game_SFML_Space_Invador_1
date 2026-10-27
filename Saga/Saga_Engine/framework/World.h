@@ -31,7 +31,7 @@
 
             explicit World(Application* owner_app);
 
-             // these are implemented in the engine
+            // these are implemented in the engine
             void start_play_internal();
 
             void tick_internal(float time);
