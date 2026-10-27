@@ -20,6 +20,11 @@
     - [The code](#the-code)
     - [Why a raw pointer and not a smart pointer](#why-a-raw-pointer-and-not-a-smart-pointer)
     - [Benefits](#benefits)
+      - [1. Switching worlds](#1-switching-worlds)
+      - [2. Quitting the game](#2-quitting-the-game)
+      - [3. Window information and rendering](#3-window-information-and-rendering)
+      - [4. Shared engine services](#4-shared-engine-services)
+      - [5. Identifying the owner](#5-identifying-the-owner)
     - [Without the pointer](#without-the-pointer)
     - [Rule for new world types](#rule-for-new-world-types)
 
@@ -297,10 +302,16 @@ World       ──Application*───────> Application  (access: how i
   who can replace it.
 - `Application* m_owner_app` in `World` answers which application the world belongs to.
 
-The first link alone is enough to run the game, as shown in the run time section. The second one
-is what lets the world **ask the application to do something**.
+The first link alone is enough to run the game, as shown in the run time section.
+
+The second one is what lets the world **ask the application to do something**.
+
+Due to this linking, that is let `World` ask `Application` class to do something, we need to do some changing 
+in `World` code:
 
 ### The code
+
+1. In **World.h**: we add a pointer and modify the constructor of `World`
 
 ```cpp
 // World.h
@@ -314,6 +325,8 @@ class World{
 };
 ```
 
+2. Since we change `World.h`, we also need to change `World.cpp`, and adapt the constructor
+
 ```cpp
 // World.cpp
 World::World(Application* owner_app):
@@ -321,6 +334,9 @@ m_owner_app{owner_app}
 {
 }
 ```
+
+3. Finally, we don't forget that `Application` manage `World`, that is `Application` is allocating and deallocating
+`World` using `std::make_shared<T>(arg)`, since we modified `World` constructor, we need to modify the `std::make_shared<T>()`.
 
 ```cpp
 // Application.h, inside LoadWorld<>()

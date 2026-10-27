@@ -70,12 +70,12 @@ namespace saga{
 
 			} // End LoadWorld()
 			
-			
-
-			
-
 
 		}; // End class Application
+
+
+
+		
 
 } // End namespace saga
 

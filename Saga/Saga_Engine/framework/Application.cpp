@@ -77,7 +77,9 @@ void Application::tick_internal(float& time){
 	if (this->m_current_world){
 		
 		this->m_current_world->start_play_internal();
+		
 		this->m_current_world->tick_internal(time);
+		// Each world tick, Actors are being created and pushed list
 	}
 
 }// End tick_internal()
@@ -103,6 +105,7 @@ void Application::render(void){
 	// extracting window dimension
 	sf::Vector2u window_dim = this->m_window.getSize();
 
+	// setting shape to center of the window
 	rect.setPosition(sf::Vector2f(window_dim.x/2,window_dim.y/2)) ;
 
 	// drawing the rectangle

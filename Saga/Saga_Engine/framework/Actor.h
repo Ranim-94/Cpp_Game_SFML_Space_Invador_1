@@ -23,6 +23,9 @@ class Actor {
 	private:
 
 	World* m_owner_world;
+	// why pointer of type World ?
+	// this way the Actor can ask World to do 
+	// something
 
 	bool m_is_play;
 
